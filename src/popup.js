@@ -94,7 +94,7 @@
 			oSpan.appendChild(oText);
 			oDiv.appendChild(oLabel);
 			oDiv.appendChild(oSpan);
-			//注册事件
+			//注册 左键事件
 			oDiv.addEventListener('click',function(){
 				if(!task.is_finished){
 					task.is_finished=!task.is_finished;
@@ -112,6 +112,10 @@
 						Tasks.Edit(task);
 					}
 				}
+			},true);
+			//注册 右键事件
+			oDiv.addEventListener('contextmenu',function(){
+				alert("right click");
 			},true);
 			Tasks.$taskItemList.appendChild(oDiv);	
 		},
