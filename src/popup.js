@@ -18,6 +18,9 @@
 		index:window.localStorage.getItem('Tasks:index'),
 		//初始化
 		init:function(){
+			var oMenu = document.getElementById("context-menu");
+			oMenu.style.display='none';
+
 			if(!Tasks.index){
 				window.localStorage.setItem('Tasks:index',Tasks.index=0);
 			}
@@ -94,13 +97,26 @@
 			oSpan.appendChild(oText);
 			oDiv.appendChild(oLabel);
 			oDiv.appendChild(oSpan);
+			var timeId;
+
 			//注册 左键事件
 			oDiv.addEventListener('click',function(){
-				if(!task.is_finished){
-					task.is_finished=!task.is_finished;
-					var lbl=this.getElementsByTagName('label')[0];
-					lbl.className= (lbl.className=='on') ? 'off' : 'on';
-					Tasks.Edit(task);
+				clearTimeout(timeId);
+				var lbl=this.getElementsByTagName('label')[0];
+				timeId = setTimeout(function() {
+					console.log("single clicked");
+					if(!task.is_finished){
+						task.is_finished=!task.is_finished;
+						lbl.className= (lbl.className=='on') ? 'off' : 'on';
+						Tasks.Edit(task);
+					}
+					else{
+						task.is_finished=!task.is_finished;
+						lbl.className= (lbl.className=='off') ? 'on' : 'off';
+						Tasks.Edit(task);
+					}
+				}, 400);
+				/*
 				}else{
 					if(confirm('是否确定要删除此项？\r\n\r\n点击确定删除，点击取消置为未完成。')){
 						Tasks.Del(task);
@@ -112,12 +128,26 @@
 						Tasks.Edit(task);
 					}
 				}
+				*/
 			},true);
+
 			//注册 右键事件
-			oDiv.addEventListener('contextmenu',function(){
-				alert("right click");
+			oDiv.addEventListener('contextmenu',function(e){
+				clearTimeout(timeId);
+				console.log("right clicked");
 			},true);
-			Tasks.$taskItemList.appendChild(oDiv);	
+
+			//注册 双击事件
+			oDiv.addEventListener('dblclick', function(){
+				clearTimeout(timeId);
+				console.log("double clicked");
+				if(confirm('是否确定要删除此项？\r\n\r\n点击确定删除，点击取消置为未完成。')){
+					Tasks.Del(task);
+					Tasks.RemoveHtml(task);
+				};
+			},true);
+
+			Tasks.$taskItemList.appendChild(oDiv);
 		},
 		RemoveHtml:function(task){
 			var taskListDiv=Tasks.$taskItemList.getElementsByTagName('div');
