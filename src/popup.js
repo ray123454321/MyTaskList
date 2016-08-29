@@ -141,10 +141,12 @@
 			oDiv.addEventListener('dblclick', function(){
 				clearTimeout(timeId);
 				console.log("double clicked");
+				/*
 				if(confirm('是否确定要删除此项？\r\n\r\n点击确定删除，点击取消置为未完成。')){
 					Tasks.Del(task);
 					Tasks.RemoveHtml(task);
 				};
+				*/
 			},true);
 
 			Tasks.$taskItemList.appendChild(oDiv);
